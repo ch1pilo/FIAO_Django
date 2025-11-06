@@ -1,0 +1,41 @@
+{% load static  %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIAO</title>
+</head>
+<body>
+
+    <header>
+        <div class="log">
+            <img src="" alt="logo">
+        </div>
+        <div class="login">
+            <a href="{% url 'login' %}" aria-label="login">Iniciar sesion</a>
+            <a href="{% url 'registrar' %}">Registrase</a>
+        </div>
+    </header>
+
+    <section class="baner-gif">
+        <video src="" aria-label="gif-logo"></video>
+        <div class="contexto">
+            <h1>Fiao </h1>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla ipsam error sunt quibusdam cum blanditiis?</p>
+        </div>
+    </section>
+
+    <section class="suscripciones">
+        {% for i in suscripciones %}
+            <div class="car">
+                <h2>{{i.name}}</h2>
+                <p>{{i.description}}</p>
+                <p>{{i.descuento}}</p>
+            </div>
+        {% endfor %}
+    </section>
+    
+</body>
+</html>

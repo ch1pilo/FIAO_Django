@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIAO - Tienda Online</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <!-- Header (se mantiene igual) -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <i class="fas fa-store"></i> FIAO
+            </div>
+            <div class="nav-links">
+                <a href="#" id="cart-btn" style="position: relative;">
+                    <i class="fas fa-shopping-cart"></i> Carrito
+                    <span id="cart-count" class="cart-count"></span>
+                </a>
+                
+                {% if es_vendedor or user_type == 'vendedor' %}
+                <a href="{% url 'gestionar_productos' %}" class="btn">
+                    <i class="fas fa-plus"></i> Agregar Producto
+                </a>
+                {% endif %}
+                
+                <a href="{% url 'logout' %}" class="btn">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content (se mantiene igual) -->
+    <main class="container">
+        <section class="welcome-section">
+            <h1>Bienvenido a FIAO, {{ user.username }}!</h1>
+            <p>Descubre los mejores productos para ti</p>
+            <div class="user-type">
+                <i class="fas fa-user"></i> {{ user_type|title }}
+            </div>
+        </section>
+
+        <section class="products-grid">
+            {% for producto in productos %}
+            <div class="product-card">
+                <h3 class="product-name">{{ producto.nombre }}</h3>
+                <p class="product-description">{{ producto.descripcion }}</p>
+                
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="product-image">
+                {% else %}
+                    <div class="no-image">
+                        <i class="fas fa-image"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="product-price">${{ producto.precio }}</div>
+                <button class="add-to-cart" data-producto-id="{{ producto.id }}">
+                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                </button>
+            </div>
+            {% empty %}
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <p>No hay productos disponibles en este momento.</p>
+                {% if es_vendedor %}
+                <a href="{% url 'gestionar_productos' %}" class="btn" style="margin-top: 1rem;">
+                    <i class="fas fa-plus"></i> Agregar Primer Producto
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <!-- Carrito Sidebar (se mantiene igual) -->
+    <div class="overlay" id="overlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart"></i> Tu Carrito</h2>
+            <button class="close-cart" id="close-cart">×</button>
+        </div>
+        <div id="cart-items">
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Tu carrito está vacío</p>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: $<span id="cart-total">0</span></strong>
+            </div>
+            <button class="btn btn-success" id="finalizar-compra" style="width: 100%;">
+                <i class="fas fa-credit-card"></i> Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Métodos de Pago (NUEVO) -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="payment-content">
+            <div class="payment-header">
+                <h2><i class="fas fa-credit-card"></i> Método de Pago</h2>
+                <button class="close-cart" id="close-payment">×</button>
+            </div>
+
+            <!-- Resumen del pedido -->
+            <div class="order-summary">
+                <h3>Resumen de tu compra</h3>
+                <div id="order-items">
+                    <!-- Los items se cargan con JavaScript -->
+                </div>
+                <div class="order-total">
+                    Total: $<span id="order-total">0</span>
+                </div>
+            </div>
+
+            <!-- Métodos de pago -->
+            <div class="payment-methods">
+                <div class="payment-method" data-method="tarjeta">
+                    <div class="payment-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">Tarjeta de Crédito/Débito</div>
+                        <div class="payment-description">Paga con tu tarjeta Visa, Mastercard o American Express</div>
+                    </div>
+                </div>
+
+                <div class="payment-method" data-method="paypal">
+                    <div class="payment-icon">
+                        <i class="fab fa-paypal"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">PayPal</div>
+                        <div class="payment-description">Paga de forma segura con tu cuenta PayPal</div>
+                    </div>
+                </div>
+
+                <div class="payment-method" data-method="transferencia">
+                    <div class="payment-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">Transferencia Bancaria</div>
+                        <div class="payment-description">Transfiere desde tu banco</div>
+                    </div>
+                </div>
+
+                <div class="payment-method" data-method="efectivo">
+                    <div class="payment-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="payment-info">
+                        <div class="payment-name">Pago en Efectivo</div>
+                        <div class="payment-description">Paga al momento de la entrega</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de Tarjeta -->
+            <div class="payment-form" id="form-tarjeta">
+                <h3>Información de la Tarjeta</h3>
+                <div class="form-group">
+                    <label for="card-number">Número de Tarjeta</label>
+                    <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="card-expiry">Fecha de Expiración</label>
+                        <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvv">CVV</label>
+                        <input type="text" id="card-cvv" placeholder="123" maxlength="3">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card-name">Nombre en la Tarjeta</label>
+                    <input type="text" id="card-name" placeholder="JUAN PEREZ">
+                </div>
+                <button class="btn-pay" id="pay-card">
+                    <i class="fas fa-lock"></i> Pagar $<span id="card-amount">0</span>
+                </button>
+            </div>
+
+            <!-- Formulario de PayPal -->
+            <div class="payment-form" id="form-paypal">
+                <h3>Pago con PayPal</h3>
+                <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+                <button class="btn-pay" id="pay-paypal">
+                    <i class="fab fa-paypal"></i> Pagar con PayPal $<span id="paypal-amount">0</span>
+                </button>
+            </div>
+
+            <!-- Formulario de Transferencia -->
+            <div class="payment-form" id="form-transferencia">
+                <h3>Transferencia Bancaria</h3>
+                <div class="bank-info">
+                    <p><strong>Banco:</strong> FIAO Bank</p>
+                    <p><strong>Cuenta:</strong> 1234-5678-9012-3456</p>
+                    <p><strong>Beneficiario:</strong> FIAO Store S.A.S.</p>
+                    <p><strong>Concepto:</strong> PEDIDO-<span id="order-number">0001</span></p>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #6b7280;">
+                    Una vez realizada la transferencia, envíanos el comprobante a pagos@fiao.com
+                </p>
+                <button class="btn-pay" id="confirm-transfer">
+                    <i class="fas fa-check"></i> Confirmar Transferencia
+                </button>
+            </div>
+
+            <!-- Formulario de Efectivo -->
+            <div class="payment-form" id="form-efectivo">
+                <h3>Pago en Efectivo</h3>
+                <p>Paga al momento de la entrega. Nuestro repartidor aceptará efectivo.</p>
+                <div class="form-group">
+                    <label for="cash-change">¿Necesita cambio para?</label>
+                    <input type="number" id="cash-change" placeholder="Ej: 50000" min="0">
+                </div>
+                <button class="btn-pay" id="confirm-cash">
+                    <i class="fas fa-check"></i> Confirmar Pago en Efectivo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 FIAO - Todos los derechos reservados</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+            <i class="fas fa-store"></i> Tu tienda online de confianza
+        </p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/carrito.js' %}"></script>
+</body>
+</html>

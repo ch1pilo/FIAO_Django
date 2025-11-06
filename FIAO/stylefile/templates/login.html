@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIAO - Login</title>
+</head>
+<body>
+    <form action="{% url 'login_view' %}" method="POST">
+        {% csrf_token %}
+        <label for="usuario">usuario</label>
+        <input type="text" name="username">
+        <label for="password">contraseña</label>
+        <input type="password" id="contraseña" name="contraseña">
+        <button type="submit">iniciar sesion</button>
+    </form>
+</body>
+</html>
