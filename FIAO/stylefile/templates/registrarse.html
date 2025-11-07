@@ -4,73 +4,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIAO - Registrarse</title>
     <link rel="stylesheet" href="{% static 'css/registro.css' %}">
-    <title>Registro - FIAO</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h2>Crear Cuenta en FIAO</h2>
-        
-        <form method="POST" action="{% url 'crear_registro' %}">
-            {% csrf_token %}
-            
-            <div class="form-group">
-                <label for="username">Nombre de Usuario</label>
-                <input type="text" id="username" name="username" required>
+    <div class="login-container">
+        <!-- Header -->
+        <header class="login-header">
+            <div class="logo">
+                <img src="{% static 'img/logFiao.png' %}" alt="Logo FIAO">
+                <span>FIAO</span>
             </div>
-            
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
+            <div class="auth-buttons">
+                <a href="{% url 'inicio' %}" class="btn-login">Regresar</a>
             </div>
-            
-            <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirm_password">Confirmar Contraseña</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-            
-            <div class="checkbox-group">
-                <input type="checkbox" id="es_vendedor" name="es_vendedor">
-                <label for="es_vendedor">Soy vendedor y quiero publicar productos</label>
-            </div>
-            
-            <!-- Sección de suscripciones con FOR -->
-            <div class="suscripciones-section" id="suscripcionesSection">
-                <h3>Selecciona tu Suscripción</h3>
-                <div class="suscripciones-grid">
-                    {% for suscripcion in suscripciones %}
-                    <div class="tarjeta-suscripcion" data-plan="{{ suscripcion.id }}" data-precio="{{ suscripcion.precio }}">
-                        <h4>{{ suscripcion.nombre }}</h4>
-                        <div class="precio">${{ suscripcion.precio }}/{{ suscripcion.periodo }}</div>
-                        <p class="descripcion">{{ suscripcion.descripcion }}</p>
-                        {% if suscripcion.caracteristicas_extra %}
-                        <ul style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">
-                            {% for caracteristica in suscripcion.caracteristicas_extra %}
-                            <li>{{ caracteristica }}</li>
-                            {% endfor %}
-                        </ul>
-                        {% endif %}
-                    </div>
-                    {% empty %}
-                    <p style="text-align: center; color: #666;">No hay suscripciones disponibles en este momento.</p>
-                    {% endfor %}
+        </header>
+
+        <!-- Formulario de Registro -->
+        <main class="login-main">
+            <div class="login-card">
+                <div class="card-header">
+                    <h1>Crear Cuenta</h1>
+                    <p>Únete a la comunidad FIAO</p>
                 </div>
-                <input type="hidden" id="plan_seleccionado" name="plan_seleccionado">
-                <input type="hidden" id="precio_seleccionado" name="precio_seleccionado">
+
+                <form method="POST" action="{% url 'crear_registro' %}" class="login-form">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario</label>
+                        <input type="text" id="username" name="username" required>
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirmar Contraseña</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+
+                    <!-- Checkbox Vendedor -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="es_vendedor" name="es_vendedor">
+                        <label for="es_vendedor">Soy vendedor y quiero publicar productos</label>
+                    </div>
+
+                    <!-- Sección de Suscripciones -->
+                    <div class="suscripciones-section" id="suscripcionesSection" style="display: none;">
+                        <h3>Selecciona tu Suscripción</h3>
+                        <div class="suscripciones-grid">
+                            {% for suscripcion in suscripciones %}
+                            <div class="tarjeta-suscripcion" data-plan="{{ suscripcion.id }}" data-precio="{{ suscripcion.precio }}">
+                                <h4>{{ suscripcion.name }}</h4>
+                                <div class="precio">${{ suscripcion.descuento }}</div>
+                                <p class="descripcion">{{ suscripcion.description }}</p>
+                                
+                            </div>
+                            {% empty %}
+                            <p class="no-suscripciones">No hay suscripciones disponibles en este momento.</p>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" id="plan_seleccionado" name="plan_seleccionado">
+                        <input type="hidden" id="precio_seleccionado" name="precio_seleccionado">
+                    </div>
+
+                    <button type="submit" class="btn-login">
+                        <i class="fas fa-user-plus"></i>
+                        Crear Cuenta
+                    </button>
+                </form>
+
+                <div class="login-links">
+                    <p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia Sesión</a></p>
+                </div>
             </div>
-            
-            <button type="submit" class="btn-registrar">Crear Cuenta</button>
-        </form>
-        
-        <div class="login-link">
-            ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia Sesión</a>
-        </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="login-footer">
+            <p>&copy; 2024 FIAO. Todos los derechos reservados.</p>
+        </footer>
     </div>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
     <script src="{% static 'js/registrarse.js' %}"></script>
 </body>
 </html>

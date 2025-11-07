@@ -7,103 +7,137 @@
     <title>Gestionar Productos - FIAO</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/gestionar_productos.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header class="header">
-        <nav class="nav">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="login-header">
             <div class="logo">
-                <i class="fas fa-store"></i> FIAO
+                <img src="{% static 'img/logFiao.png' %}" alt="">
+                <span>FIAO</span>
             </div>
             <div class="nav-links">
-                <a href="{% url 'tienda' %}">
+                <a href="{% url 'tienda' %}" class="nav-link">
                     <i class="fas fa-home"></i> Volver a Tienda
                 </a>
-                <a href="{% url 'logout' %}" class="btn">
+                <a href="{% url 'logout' %}" class="nav-link btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
                 </a>
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <main class="container">
-        <div class="gestion-container">
-            <!-- Formulario para crear producto -->
-            <section class="form-section">
-                <h2><i class="fas fa-plus-circle"></i> Crear Nuevo Producto</h2>
-                <form method="POST" enctype="multipart/form-data" class="product-form">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="nombre">Nombre del Producto</label>
-                        <input type="text" id="nombre" name="nombre" required>
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="management-container">
+                <!-- Formulario para crear producto -->
+                <section class="form-section">
+                    <div class="section-card">
+                        <div class="card-header">
+                            <h1><i class="fas fa-plus-circle"></i> Crear Nuevo Producto</h1>
+                            <p>Agrega nuevos productos a tu catálogo</p>
+                        </div>
+                        
+                        <form method="POST" enctype="multipart/form-data" class="product-form">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="nombre">Nombre del Producto</label>
+                                <input type="text" id="nombre" name="nombre" required>
+                                <i class="fas fa-tag input-icon"></i>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="descripcion">Descripción</label>
+                                <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
+                                <i class="fas fa-align-left input-icon textarea-icon"></i>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="precio">Precio ($)</label>
+                                <input type="number" id="precio" name="precio" step="0.01" min="0" required>
+                                <i class="fas fa-dollar-sign input-icon"></i>
+                            </div>
+                            
+                            <div class="form-group file-group">
+                                <label for="imagen">Imagen del Producto</label>
+                                <input type="file" id="imagen" name="imagen" accept="image/*" class="file-input">
+                                <label for="imagen" class="file-label">
+                                    <i class="fas fa-upload"></i>
+                                    <span>Seleccionar imagen</span>
+                                </label>
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Producto
+                            </button>
+                        </form>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" name="descripcion" rows="3" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="precio">Precio ($)</label>
-                        <input type="number" id="precio" name="precio" step="0.01" min="0" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="imagen">Imagen del Producto</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Guardar Producto
-                    </button>
-                </form>
-            </section>
+                </section>
 
-            <!-- Lista de productos existentes -->
-            <section class="products-section">
-                <h2><i class="fas fa-boxes"></i> Mis Productos ({{ productos.count }})</h2>
-                
-                {% if productos %}
-                <div class="products-grid">
-                    {% for producto in productos %}
-                    <div class="product-card">
-                        {% if producto.imagen %}
-                        <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="product-image">
+                <!-- Lista de productos existentes -->
+                <section class="products-section">
+                    <div class="section-card">
+                        <div class="card-header">
+                            <h1><i class="fas fa-boxes"></i> Mis Productos ({{ productos.count }})</h1>
+                            <p>Gestiona tus productos existentes</p>
+                        </div>
+                        
+                        {% if productos %}
+                        <div class="products-grid">
+                            {% for producto in productos %}
+                            <div class="product-card">
+                                <div class="product-image-container">
+                                    {% if producto.imagen %}
+                                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="product-image">
+                                    {% else %}
+                                    <div class="no-image">
+                                        <i class="fas fa-image"></i>
+                                        <span>Sin imagen</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="product-info">
+                                    <h3 class="product-name">{{ producto.nombre }}</h3>
+                                    <p class="product-description">{{ producto.descripcion }}</p>
+                                    <div class="product-price">${{ producto.precio }}</div>
+                                    
+                                    <form method="POST" action="{% url 'eliminar_producto' producto.id %}" class="delete-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">
+                                            <i class="fas fa-trash-alt"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                         {% else %}
-                        <div class="no-image">
-                            <i class="fas fa-image"></i>
+                        <div class="no-products">
+                            <i class="fas fa-box-open"></i>
+                            <h3>No tienes productos registrados</h3>
+                            <p>Comienza agregando tu primer producto usando el formulario</p>
                         </div>
                         {% endif %}
-                        
-                        <div class="product-info">
-                            <h3 class="product-name">{{ producto.nombre }}</h3>
-                            <p class="product-description">{{ producto.descripcion }}</p>
-                            <div class="product-price">${{ producto.precio }}</div>
-                            
-                            <form method="POST" action="{% url 'eliminar_producto' producto.id %}" class="delete-form">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar este producto?')">
-                                    <i class="fas fa-trash-alt"></i> Eliminar Producto
-                                </button>
-                            </form>
-                        </div>
                     </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="no-products">
-                    <i class="fas fa-box-open"></i>
-                    <p>No tienes productos registrados</p>
-                </div>
-                {% endif %}
-            </section>
-        </div>
-    </main>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="login-footer">
+            <p>&copy; 2024 FIAO. Todos los derechos reservados.</p>
+        </footer>
+    </div>
 
     <!-- Mensajes -->
     {% if messages %}
     <div class="messages-container">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
             {{ message }}
         </div>
         {% endfor %}

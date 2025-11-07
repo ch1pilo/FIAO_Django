@@ -18,7 +18,7 @@ class tipo(models.Model):
     name = models.CharField(max_length=100)
     def __str__(self):
         return self.name
-
+ 
 class producto(models.Model):
     id_usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=200)

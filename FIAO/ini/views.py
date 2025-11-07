@@ -33,7 +33,7 @@ def login_view(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
-            password = request.POST.get('contraseña')
+            password = request.POST.get('password')
             print('se obtuvieron los datos')
             if not username or not password:
                 print('faltan datos')

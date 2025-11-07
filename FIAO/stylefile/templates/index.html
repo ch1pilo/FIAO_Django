@@ -1,41 +1,132 @@
-{% load static  %}
-
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIAO</title>
+    <title>FIAO - Inicio</title>
+    <link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-
+    <!-- Header -->
     <header>
-        <div class="log">
-            <img src="" alt="logo">
-        </div>
-        <div class="login">
-            <a href="{% url 'login' %}" aria-label="login">Iniciar sesion</a>
-            <a href="{% url 'registrar' %}">Registrase</a>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{% static 'img/logFiao.png' %}" alt="Logo FIAO">
+                <p class="banner-title">FIAO</p>
+            </div>
+
+            <div class="hmabu" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+
+            <div class="auth-buttons nav-links" id="nav-menu">
+                <img src="{% static 'img/logFiao.png' %}" alt="">
+                <a href="{% url 'login' %}" class="btn-login">Iniciar Sesión</a>
+                <a href="{% url 'registrar' %}" class="btn-register">Registrarse</a>
+            </div>
         </div>
     </header>
 
-    <section class="baner-gif">
-        <video src="" aria-label="gif-logo"></video>
-        <div class="contexto">
-            <h1>Fiao </h1>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla ipsam error sunt quibusdam cum blanditiis?</p>
+    <!-- Banner con GIF -->
+    <section class="banner">
+        <div class="banner-video">
+            <video autoplay muted loop playsinline class="fullscreen-video">
+                <source src="{% static 'video/gif.mp4' %}" type="video/mp4">
+                Tu navegador no soporta el elemento video.
+            </video>
+        </div>
+        <div class="banner-content">
+            <h1 class="banner-title">FIAO</h1>
+            <p class="banner-text">Hacemos tus metas posibles. Descubre una nueva forma de comprar con las mejores ofertas y productos exclusivos.</p>
+            <a href="{% url 'registrar' %}" class="btn-banner">Comenzar Ahora</a>
         </div>
     </section>
 
+    <!-- Sección de Suscripciones -->
     <section class="suscripciones">
-        {% for i in suscripciones %}
-            <div class="car">
-                <h2>{{i.name}}</h2>
-                <p>{{i.description}}</p>
-                <p>{{i.descuento}}</p>
+        <h2 class="section-title">Nuestros Planes</h2>
+        <p class="section-subtitle">Elige el plan perfecto para tus necesidades</p>
+        
+        <div class="suscripciones-grid">
+            {% for suscripcion in suscripciones %}
+            <div class="suscripcion-card">
+                <div class="card-header">
+                    <h3>{{ suscripcion.name }}</h3>
+                    <div class="descuento-badge">{{ suscripcion.descuento }}% OFF</div>
+                </div>
+                <div class="card-body">
+                    <p class="suscripcion-descripcion">{{ suscripcion.description }}</p>
+                    <ul class="suscripcion-features">
+                        <li><i class="fas fa-check"></i> Acceso completo</li>
+                        <li><i class="fas fa-check"></i> Soporte prioritario</li>
+                        <li><i class="fas fa-check"></i> Actualizaciones gratis</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'registrar' %}" class="btn-suscripcion">Elegir Plan</a>
+                </div>
             </div>
-        {% endfor %}
+            {% empty %}
+            <div class="no-suscripciones">
+                <p>No hay suscripciones disponibles en este momento.</p>
+            </div>
+            {% endfor %}
+        </div>
     </section>
-    
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <img src="{% static 'img/logFiao.png' %}" alt="Logo FIAO">
+                    <span>FIAO</span>
+                </div>
+                <p class="footer-text">Hacemos tus metas posibles con los mejores productos y servicios.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Enlaces Rápidos</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                    <li><a href="{% url 'registrar' %}">Registrarse</a></li>
+                    <li><a href="#">Soporte</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Contacto</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-envelope"></i> info@fiao.com</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Ciudad, País</p>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Síguenos</h4>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2024 FIAO. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script src="{% static 'js/particulas.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 </body>
 </html>

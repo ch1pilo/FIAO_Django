@@ -1,4 +1,4 @@
-/* Estilos generales - Mismos que login */
+/* Estilos generales */
 * {
     margin: 0;
     padding: 0;
@@ -67,7 +67,7 @@ body {
     padding: 40px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     border: 1px solid #e0e0e0;
 }
 
@@ -131,109 +131,7 @@ body {
     font-size: 1rem;
 }
 
-/* Checkbox Group */
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: auto;
-    margin: 0;
-}
-
-.checkbox-group label {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-/* Sección Suscripciones */
-.suscripciones-section {
-    margin-bottom: 25px;
-    padding: 20px;
-    background: #f9f9f9;
-    border-radius: 10px;
-    border: 1px solid #e0e0e0;
-}
-
-.suscripciones-section h3 {
-    text-align: center;
-    color: #351a69;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-}
-
-.suscripciones-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.tarjeta-suscripcion {
-    padding: 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: white;
-}
-
-.tarjeta-suscripcion:hover {
-    border-color: #522aa5;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.tarjeta-suscripcion.seleccionada {
-    border-color: #522aa5;
-    background: linear-gradient(135deg, #f8f6ff, #e8e2ff);
-}
-
-.tarjeta-suscripcion h4 {
-    color: #351a69;
-    margin-bottom: 8px;
-    font-size: 1.1rem;
-}
-
-.precio {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #522aa5;
-    margin-bottom: 8px;
-}
-
-.descripcion {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-.caracteristicas-lista {
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.5rem;
-    padding-left: 20px;
-}
-
-.caracteristicas-lista li {
-    margin-bottom: 3px;
-}
-
-.no-suscripciones {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    padding: 20px;
-}
-
-/* Botón de Registro */
+/* Botón de Login */
 .btn-login {
     width: 100%;
     padding: 15px;
@@ -249,6 +147,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    text-decoration: none;
 }
 
 .btn-login:hover {
@@ -282,6 +181,15 @@ body {
     text-decoration: underline;
 }
 
+.forgot-password {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.forgot-password:hover {
+    color: #522aa5;
+}
+
 /* Footer */
 .login-footer {
     background: #333;
@@ -296,20 +204,28 @@ body {
     font-size: 0.9rem;
 }
 
-/* Animaciones */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Mensajes de error (si los necesitas) */
+.messages {
+    margin-bottom: 20px;
 }
 
-.login-card {
-    animation: fadeIn 0.6s ease-out;
+.alert {
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.alert-error {
+    background: #fee;
+    border: 1px solid #fcc;
+    color: #c33;
+}
+
+.alert-success {
+    background: #efe;
+    border: 1px solid #cfc;
+    color: #3c3;
 }
 
 /* Responsive Design */
@@ -330,14 +246,6 @@ body {
     .form-group input {
         padding: 12px 40px 12px 12px;
     }
-
-    .suscripciones-section {
-        padding: 15px;
-    }
-
-    .tarjeta-suscripcion {
-        padding: 12px;
-    }
 }
 
 @media (max-height: 600px) {
@@ -348,4 +256,42 @@ body {
     .login-card {
         padding: 30px;
     }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Estados de carga */
+.btn-login.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-login.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
