@@ -45,7 +45,7 @@ body {
 }
 
 .logo span {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Montserrat', sans-serif;
     font-size: 2rem;
     font-weight: bold;
 }
@@ -994,7 +994,7 @@ body.no-scroll {
 }
 
 .banner-title {
-    font-family: 'Dancing Script', cursive;
+    font-family: 'Montserrat', sans-serif;
     font-size: 5rem;
     font-weight: bold;
     margin-bottom: 25px;

@@ -74,6 +74,9 @@ def crear_registro(request):
             confirm_password = request.POST.get('confirm_password')
             es_vendedor = request.POST.get('es_vendedor')  # Checkbox
             plan_seleccionado = request.POST.get('plan_seleccionado')  # ID del plan
+            if plan_seleccionado == "":
+                plan_seleccionado = "1"
+
             id_plan = int(plan_seleccionado)
             pla_obje = models.suscripcion.objects.get(id=id_plan)
             print(f"📝 DEPURACIÓN:")
@@ -82,6 +85,12 @@ def crear_registro(request):
             print(f"Es vendedor: '{es_vendedor}'")
             print(f"Plan seleccionado: '{plan_seleccionado}'")
 
+            usuarios = User.objects.all()
+            for i in usuarios:
+                if i.username == username:
+                    print (f'{i.username} = {username}')
+                    print ('coinside')
+                    return redirect('inicio')
             # Validar contraseñas
             if password != confirm_password:
                 messages.error(request, 'Las contraseñas no coinciden')
